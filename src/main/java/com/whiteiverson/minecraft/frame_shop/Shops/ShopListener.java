@@ -39,10 +39,10 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.*;
 
 public class ShopListener implements Listener {
-    private static final int SLOT_MINUS_ONE = 10;
-    private static final int SLOT_PLUS_ONE = 16;
-    private static final int SLOT_MINUS_STACK = 11;
-    private static final int SLOT_PLUS_STACK = 15;
+    private static final int SLOT_MINUS_STACK = 10;
+    private static final int SLOT_MINUS_ONE = 11;
+    private static final int SLOT_PLUS_ONE = 15;
+    private static final int SLOT_PLUS_STACK = 16;
     private static final int SLOT_ITEM_INFO = 13;
     private static final int SLOT_CUSTOM_AMOUNT = 21;
     private static final int SLOT_BUY = 23;
@@ -356,9 +356,9 @@ public class ShopListener implements Listener {
         String title = messageUtil.color(plugin.getConfig().getString("settings.gui-title", "&8Buy Item"));
         Inventory gui = Bukkit.createInventory(null, 27, title);
 
+        gui.setItem(SLOT_MINUS_STACK, createButton(Material.RED_STAINED_GLASS_PANE, "&c-Stack", null));
         gui.setItem(SLOT_MINUS_ONE, createButton(Material.ORANGE_STAINED_GLASS_PANE, "&c-1", null));
         gui.setItem(SLOT_PLUS_ONE, createButton(Material.GREEN_STAINED_GLASS_PANE, "&a+1", null));
-        gui.setItem(SLOT_MINUS_STACK, createButton(Material.RED_STAINED_GLASS_PANE, "&c-Stack", null));
         gui.setItem(SLOT_PLUS_STACK, createButton(Material.LIME_STAINED_GLASS_PANE, "&a+Stack", null));
         gui.setItem(SLOT_CUSTOM_AMOUNT, createButton(Material.PAPER, "&eType Amount", Collections.singletonList("&7Click to type amount in chat")));
 
