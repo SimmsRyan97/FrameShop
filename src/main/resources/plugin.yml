@@ -1,0 +1,24 @@
+name: FrameShop
+version: 1.0.12
+main: com.whiteiverson.minecraft.frame_shop.Main
+api-version: 1.18
+author: WhiteIverson97
+description: Item-frame buy shop plugin with Vault and EssentialsX worth integration
+softdepend: [Vault, Essentials]
+
+commands:
+  fsreload:
+    description: Reload FrameShop config
+    usage: /fsreload
+    permission: frameshop.reload
+
+permissions:
+  frameshop.create:
+    description: Allows creating buy signs below item frames
+    default: op
+  frameshop.use:
+    description: Allows using buy signs
+    default: true
+  frameshop.reload:
+    description: Allows reloading FrameShop config
+    default: op

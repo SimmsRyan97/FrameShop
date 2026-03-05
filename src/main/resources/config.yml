@@ -1,0 +1,23 @@
+settings:
+  tax-percent: 25.0
+  gui-title: "&8Buy Item"
+  sign-label: "[Buy]"
+  inactive-sign-label: "&c[Inactive]"
+
+messages:
+  no-permission-create: "&cYou do not have permission to create buy shops."
+  no-permission-use: "&cYou do not have permission to use this shop."
+  sign-created: "&aBuy sign created."
+  item-frame-empty: "&cThe item frame above this sign is empty."
+  no-worth-found: "&cNo Essentials worth price found for this item."
+  invalid-amount: "&cPlease enter a valid amount greater than 0."
+  amount-set: "&aAmount set to &e{amount}&a."
+  amount-prompt: "&eType the amount in chat, or type &ccancel&e to stop."
+  amount-cancelled: "&cAmount input cancelled."
+  not-enough-money: "&cYou need &e${total}&c but you only have &e${balance}&c."
+  not-enough-space: "&cNot enough inventory space for &e{amount}x {item}&c."
+  buy-success: "&aPurchased &e{amount}x {item} &afor &e${total}&a."
+  purchase-failed: "&cPurchase failed. Please try again."
+  plugin-enabled: "&aFrameShop enabled."
+  plugin-disabled: "&cFrameShop disabled."
+  plugin-reloaded: "&aFrameShop config reloaded."
