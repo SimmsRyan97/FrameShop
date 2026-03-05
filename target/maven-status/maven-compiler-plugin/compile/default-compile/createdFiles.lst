@@ -1,9 +1,0 @@
-com\whiteiverson\minecraft\frame_shop\Commands\FrameShopReloadCommand.class
-com\whiteiverson\minecraft\frame_shop\Utilities\InventoryUtil.class
-com\whiteiverson\minecraft\frame_shop\Shops\ShopListener.class
-com\whiteiverson\minecraft\frame_shop\Utilities\MessageUtil.class
-com\whiteiverson\minecraft\frame_shop\Main.class
-com\whiteiverson\minecraft\frame_shop\Utilities\PriceUtil.class
-com\whiteiverson\minecraft\frame_shop\Services\VaultService.class
-com\whiteiverson\minecraft\frame_shop\Shops\ShopSession.class
-com\whiteiverson\minecraft\frame_shop\Services\EssentialsWorthService.class

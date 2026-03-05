@@ -1,17 +1,44 @@
 # FrameShop
 
-FrameShop is a simple and friendly shop plugin that lets players buy items through item frames and signs. It is made to feel natural in survival worlds, towns, and player markets, so shops look like part of the world instead of a command menu.
+Welcome to **FrameShop**.
+FrameShop turns item frames and signs into a clean, immersive shopping experience that feels right at home in any Minecraft world. Instead of clunky shop systems, your players get a visual market that is easy to use and genuinely fun to interact with.
 
-## Why FrameShop is great
+## Features
 
-- It makes buying items quick and easy for everyone.
-- Shops feel immersive and visual, not cluttered or confusing.
-- Server economies feel more alive because trading is easy to understand.
-- It helps players build real market areas that look good and stay active.
-- New players can figure it out fast without needing long instructions.
+### Visual, world-friendly shops
 
-## A better shopping experience
+- **Natural market style**: Shops are built directly into your world using item frames and signs.
+- **Easy to understand**: Players can see exactly what they are buying at a glance.
+- **Great for towns and spawn markets**: Build shopping districts that feel alive and intentional.
 
-FrameShop keeps things smooth for both shoppers and shop owners. Players can browse market stalls naturally, and server communities can build vibrant shopping districts that become part of the world’s identity.
+### Fast and flexible buying
 
-If you want a plugin that makes your server economy feel clean, modern, and fun, FrameShop is a strong choice.
+- **Quick amount controls**: Players can adjust by `-stack`, `-1`, `+1`, or `+stack` in the GUI.
+- **Custom amount input**: Buyers can type an exact amount for full control.
+- **Smooth purchase flow**: The process is simple, fast, and friendly for both new and experienced players.
+
+### Economy-ready experience
+
+- **Automatic price lookup**: Item prices come from Essentials worth values.
+- **Built-in economy support**: Works with Vault economy providers.
+- **Tax support**: Add a configurable tax percentage to shape your server economy.
+
+### Clear feedback for players
+
+- **Helpful messages**: Players get clear responses for success, invalid amounts, low balance, and inventory limits.
+- **Readable chat formatting**: Messages are styled for clarity and quick understanding.
+- **Reliable sign states**: Shop signs visibly update when frames are active or inactive.
+
+## Why server owners like FrameShop
+
+- It makes your economy feel more active without overwhelming players.
+- It keeps shopping immersive instead of pulling players out of the world.
+- It is simple for players to use and easy to manage day to day.
+
+## Bug Reports and Suggestions
+
+Feedback helps FrameShop keep getting better. If you find a bug or want to suggest an improvement, share it and help shape future updates.
+
+## Final Word
+
+If you want a shop plugin that feels modern, intuitive, and built for real player interaction, **FrameShop** is a strong fit for your server.
