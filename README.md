@@ -1,6 +1,5 @@
 # FrameShop
 
-Welcome to **FrameShop**.
 FrameShop turns item frames and signs into a clean, immersive shopping experience that feels right at home in any Minecraft world. Instead of clunky shop systems, your players get a visual market that is easy to use and genuinely fun to interact with.
 
 ## Features
