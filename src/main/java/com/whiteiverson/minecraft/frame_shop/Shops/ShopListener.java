@@ -186,11 +186,17 @@ public class ShopListener implements Listener {
         }
 
         if (slot == SLOT_MINUS_STACK) {
+            if (!hasStackControls(session)) {
+                return;
+            }
             updateAmount(player, session, session.getAmount() - session.getItemStack().getMaxStackSize());
             return;
         }
 
         if (slot == SLOT_PLUS_STACK) {
+            if (!hasStackControls(session)) {
+                return;
+            }
             updateAmount(player, session, session.getAmount() + session.getItemStack().getMaxStackSize());
             return;
         }
@@ -356,10 +362,12 @@ public class ShopListener implements Listener {
         String title = messageUtil.color(plugin.getConfig().getString("settings.gui-title", "&8Buy Item"));
         Inventory gui = Bukkit.createInventory(null, 27, title);
 
-        gui.setItem(SLOT_MINUS_STACK, createButton(Material.RED_STAINED_GLASS_PANE, "&c-Stack", null));
+        if (hasStackControls(session)) {
+            gui.setItem(SLOT_MINUS_STACK, createButton(Material.RED_STAINED_GLASS_PANE, "&c-Stack", null));
+            gui.setItem(SLOT_PLUS_STACK, createButton(Material.LIME_STAINED_GLASS_PANE, "&a+Stack", null));
+        }
         gui.setItem(SLOT_MINUS_ONE, createButton(Material.ORANGE_STAINED_GLASS_PANE, "&c-1", null));
         gui.setItem(SLOT_PLUS_ONE, createButton(Material.GREEN_STAINED_GLASS_PANE, "&a+1", null));
-        gui.setItem(SLOT_PLUS_STACK, createButton(Material.LIME_STAINED_GLASS_PANE, "&a+Stack", null));
         gui.setItem(SLOT_CUSTOM_AMOUNT, createButton(Material.PAPER, "&eType Amount", Collections.singletonList("&7Click to type amount in chat")));
 
         ItemStack info = session.getItemStack().clone();
@@ -381,6 +389,10 @@ public class ShopListener implements Listener {
         )));
 
         player.openInventory(gui);
+    }
+
+    private boolean hasStackControls(ShopSession session) {
+        return session.getItemStack().getMaxStackSize() > 1;
     }
 
     private ItemStack createButton(Material material, String name, List<String> lore) {
