@@ -565,7 +565,7 @@ public class ShopListener implements Listener {
     }
 
     private void setSignInactive(Sign sign) {
-        String inactiveLabel = messageUtil.color("&c" + strip(getInactiveLabel()));
+        String inactiveLabel = messageUtil.color(getInactiveLabel());
         if (sign.getLine(1).equals(inactiveLabel)) {
             return;
         }
@@ -577,7 +577,7 @@ public class ShopListener implements Listener {
     }
 
     private void setSignActive(Sign sign) {
-        String activeLabel = messageUtil.color("&a" + strip(getBuyLabel()));
+        String activeLabel = messageUtil.color(getBuyLabel());
         if (sign.getLine(1).equals(activeLabel)) {
             return;
         }
@@ -595,7 +595,7 @@ public class ShopListener implements Listener {
     }
 
     private String getBuyLabel() {
-        return plugin.getConfig().getString("settings.sign-label", "[Buy]");
+        return plugin.getConfig().getString("settings.sign-label", "&a[Buy]");
     }
 
     private String getInactiveLabel() {

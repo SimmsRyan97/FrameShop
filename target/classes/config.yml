@@ -1,7 +1,7 @@
 settings:
   tax-percent: 25.0
   gui-title: "&8Buy Item"
-  sign-label: "[Buy]"
+  sign-label: "&a[Buy]"
   inactive-sign-label: "&c[Inactive]"
 
 messages:
