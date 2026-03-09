@@ -2,7 +2,9 @@ settings:
   tax-percent: 25.0
   gui-title: "&8Buy Item"
   sign-label: "&a[Buy]"
+  active-sign-dye: "LIME"
   inactive-sign-label: "&c[Inactive]"
+  inactive-sign-dye: "RED"
 
 messages:
   no-permission-create: "&cYou do not have permission to create buy shops."
