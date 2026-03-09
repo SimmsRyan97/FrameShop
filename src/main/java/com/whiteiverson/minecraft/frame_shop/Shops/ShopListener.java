@@ -566,25 +566,31 @@ public class ShopListener implements Listener {
 
     private void setSignInactive(Sign sign) {
         String inactiveLabel = messageUtil.color(getInactiveLabel());
-        if (sign.getLine(1).equals(inactiveLabel)) {
+        DyeColor inactiveColor = getInactiveSignDye();
+        if (sign.getLine(1).equals(inactiveLabel)
+                && sign.isGlowingText()
+                && sign.getColor() == inactiveColor) {
             return;
         }
 
         sign.setLine(1, inactiveLabel);
         sign.setGlowingText(true);
-        sign.setColor(DyeColor.RED);
+        sign.setColor(inactiveColor);
         sign.update(true, false);
     }
 
     private void setSignActive(Sign sign) {
         String activeLabel = messageUtil.color(getBuyLabel());
-        if (sign.getLine(1).equals(activeLabel)) {
+        DyeColor activeColor = getActiveSignDye();
+        if (sign.getLine(1).equals(activeLabel)
+                && sign.isGlowingText()
+                && sign.getColor() == activeColor) {
             return;
         }
 
         sign.setLine(1, activeLabel);
         sign.setGlowingText(true);
-        sign.setColor(DyeColor.LIME);
+        sign.setColor(activeColor);
         sign.update(true, false);
     }
 
@@ -600,6 +606,27 @@ public class ShopListener implements Listener {
 
     private String getInactiveLabel() {
         return plugin.getConfig().getString("settings.inactive-sign-label", "&c[Inactive]");
+    }
+
+    private DyeColor getActiveSignDye() {
+        return getConfiguredDye("settings.active-sign-dye", DyeColor.LIME);
+    }
+
+    private DyeColor getInactiveSignDye() {
+        return getConfiguredDye("settings.inactive-sign-dye", DyeColor.RED);
+    }
+
+    private DyeColor getConfiguredDye(String path, DyeColor fallback) {
+        String configured = plugin.getConfig().getString(path, fallback.name());
+        if (configured == null || configured.trim().isEmpty()) {
+            return fallback;
+        }
+
+        try {
+            return DyeColor.valueOf(configured.trim().toUpperCase(Locale.ENGLISH));
+        } catch (IllegalArgumentException ex) {
+            return fallback;
+        }
     }
 
     private String strip(String text) {
