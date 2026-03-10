@@ -4,6 +4,7 @@ import com.whiteiverson.minecraft.frame_shop.Main;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -132,10 +133,22 @@ public class EssentialsWorthService {
         boolean matchedAny = false;
 
         List<String> materialKeys = getCandidateWorthKeys(itemStack);
+        double baseEnchantedBookWorth = getBaseMaterialWorth(Material.ENCHANTED_BOOK);
+        boolean isEnchantedBookItem = itemStack.getType() == Material.ENCHANTED_BOOK;
+
         for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
             List<String> enchantKeys = getEnchantmentKeyCandidates(entry.getKey());
             int level = entry.getValue();
             Double bonus = findBestEnchantmentBonus(materialKeys, enchantKeys, level);
+
+            if (!isEnchantedBookItem) {
+                Double bookBonus = findBestEnchantmentBonus(getMaterialWorthKeys(Material.ENCHANTED_BOOK), enchantKeys, level);
+                if (bookBonus != null) {
+                    double bookEquivalent = baseEnchantedBookWorth + bookBonus;
+                    bonus = bonus == null ? bookEquivalent : Math.max(bonus, bookEquivalent);
+                }
+            }
+
             if (bonus != null) {
                 totalBonus += bonus;
                 matchedAny = true;
@@ -226,8 +239,12 @@ public class EssentialsWorthService {
     }
 
     private List<String> getCandidateWorthKeys(ItemStack itemStack) {
+        return getMaterialWorthKeys(itemStack.getType());
+    }
+
+    private List<String> getMaterialWorthKeys(Material materialType) {
         List<String> keys = new ArrayList<>();
-        String material = itemStack.getType().name().toLowerCase(Locale.ENGLISH);
+        String material = materialType.name().toLowerCase(Locale.ENGLISH);
 
         String compact = material.replace("_", "");
         if (!compact.isEmpty()) {
@@ -236,11 +253,26 @@ public class EssentialsWorthService {
 
         keys.add(material);
 
-        String namespaced = itemStack.getType().getKey().toString().toLowerCase(Locale.ENGLISH);
+        String namespaced = materialType.getKey().toString().toLowerCase(Locale.ENGLISH);
         keys.add(namespaced);
         keys.add(namespaced.replace("minecraft:", ""));
 
         return keys;
+    }
+
+    private double getBaseMaterialWorth(Material materialType) {
+        if (essentialsWorthConfig == null) {
+            return 0.0D;
+        }
+
+        for (String key : getMaterialWorthKeys(materialType)) {
+            Double value = parseWorthValue("worth." + key);
+            if (value != null && value > 0.0D) {
+                return value;
+            }
+        }
+
+        return 0.0D;
     }
 
     private Double attemptDirectWorth(ItemStack itemStack) {
