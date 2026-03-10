@@ -3,15 +3,24 @@ package com.whiteiverson.minecraft.frame_shop.Services;
 import com.whiteiverson.minecraft.frame_shop.Main;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class EssentialsWorthService {
     private final Main plugin;
@@ -37,19 +46,25 @@ public class EssentialsWorthService {
 
         refreshWorthFile();
 
+        Double enchantBonus = attemptEnchantmentBonusFromWorthFile(itemStack);
+
         Double direct = attemptDirectWorth(itemStack);
         if (direct != null) {
-            return direct;
+            return direct + (enchantBonus == null ? 0.0D : enchantBonus);
         }
 
         Double viaWorthManager = attemptWorthManager(itemStack);
         if (viaWorthManager != null) {
-            return viaWorthManager;
+            return viaWorthManager + (enchantBonus == null ? 0.0D : enchantBonus);
         }
 
         Double fromWorthFile = attemptWorthFileLookup(itemStack);
         if (fromWorthFile != null) {
-            return fromWorthFile;
+            return fromWorthFile + (enchantBonus == null ? 0.0D : enchantBonus);
+        }
+
+        if (enchantBonus != null && enchantBonus > 0.0D) {
+            return enchantBonus;
         }
 
         return null;
@@ -101,6 +116,113 @@ public class EssentialsWorthService {
         }
 
         return null;
+    }
+
+    private Double attemptEnchantmentBonusFromWorthFile(ItemStack itemStack) {
+        if (essentialsWorthConfig == null) {
+            return null;
+        }
+
+        Map<Enchantment, Integer> enchantments = getItemEnchantments(itemStack);
+        if (enchantments.isEmpty()) {
+            return null;
+        }
+
+        double totalBonus = 0.0D;
+        boolean matchedAny = false;
+
+        List<String> materialKeys = getCandidateWorthKeys(itemStack);
+        for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+            List<String> enchantKeys = getEnchantmentKeyCandidates(entry.getKey());
+            int level = entry.getValue();
+            Double bonus = findBestEnchantmentBonus(materialKeys, enchantKeys, level);
+            if (bonus != null) {
+                totalBonus += bonus;
+                matchedAny = true;
+            }
+        }
+
+        return matchedAny ? totalBonus : null;
+    }
+
+    private Double findBestEnchantmentBonus(List<String> materialKeys, List<String> enchantKeys, int level) {
+        for (String materialKey : materialKeys) {
+            for (String enchantKey : enchantKeys) {
+                Double exact = parseWorthValue("worth." + materialKey + "|" + enchantKey + "|" + level);
+                if (exact != null && exact > 0.0D) {
+                    return exact;
+                }
+            }
+        }
+
+        for (String materialKey : materialKeys) {
+            for (String enchantKey : enchantKeys) {
+                Double materialAnyLevel = parseWorthValue("worth." + materialKey + "|" + enchantKey);
+                if (materialAnyLevel != null && materialAnyLevel > 0.0D) {
+                    return materialAnyLevel;
+                }
+            }
+        }
+
+        for (String enchantKey : enchantKeys) {
+            Double globalExact = parseWorthValue("worth.any|" + enchantKey + "|" + level);
+            if (globalExact != null && globalExact > 0.0D) {
+                return globalExact;
+            }
+        }
+
+        for (String enchantKey : enchantKeys) {
+            Double globalAnyLevel = parseWorthValue("worth.any|" + enchantKey);
+            if (globalAnyLevel != null && globalAnyLevel > 0.0D) {
+                return globalAnyLevel;
+            }
+        }
+
+        return null;
+    }
+
+    private Double parseWorthValue(String path) {
+        if (essentialsWorthConfig == null) {
+            return null;
+        }
+
+        Object raw = essentialsWorthConfig.get(path);
+        return parseNumeric(raw);
+    }
+
+    private Map<Enchantment, Integer> getItemEnchantments(ItemStack itemStack) {
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta == null) {
+            return Collections.emptyMap();
+        }
+
+        Map<Enchantment, Integer> source;
+        if (meta instanceof EnchantmentStorageMeta) {
+            source = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+        } else {
+            source = meta.getEnchants();
+        }
+
+        if (source == null || source.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        List<Map.Entry<Enchantment, Integer>> entries = new ArrayList<>(source.entrySet());
+        entries.sort(Comparator.comparing(entry -> entry.getKey().getKey().toString()));
+
+        Map<Enchantment, Integer> ordered = new HashMap<>();
+        for (Map.Entry<Enchantment, Integer> entry : entries) {
+            ordered.put(entry.getKey(), entry.getValue());
+        }
+        return ordered;
+    }
+
+    private List<String> getEnchantmentKeyCandidates(Enchantment enchantment) {
+        Set<String> keys = new LinkedHashSet<>();
+        String namespaced = enchantment.getKey().toString().toLowerCase(Locale.ENGLISH);
+        keys.add(namespaced);
+        keys.add(namespaced.replace("minecraft:", ""));
+        return new ArrayList<>(keys);
     }
 
     private List<String> getCandidateWorthKeys(ItemStack itemStack) {

@@ -22,6 +22,42 @@ FrameShop turns item frames and signs into a clean, immersive shopping experienc
 - **Built-in economy support**: Works with Vault economy providers.
 - **Tax support**: Add a configurable tax percentage to shape your server economy.
 
+### Enchantment pricing support
+
+FrameShop now supports enchantment bonus pricing using your existing `Essentials/worth.yml` file.
+
+- Keep your normal base item price, for example `enchantedbook` or `diamondsword`.
+- Add optional enchant bonus keys under the same `worth:` section.
+- Bonus values are added on top of the base price.
+
+Supported key formats:
+
+- `<item>|<enchant>|<level>`: exact item + exact enchant + exact level
+- `<item>|<enchant>`: exact item + exact enchant for any level
+- `any|<enchant>|<level>`: global enchant bonus for that level
+- `any|<enchant>`: global enchant bonus for any level
+
+Use lowercase material/enchant names (without spaces). You can use either namespaced enchant keys (like `minecraft:sharpness`) or short keys (like `sharpness`).
+
+Example:
+
+```yml
+worth:
+	enchantedbook: 89.3
+	enchantedbook|sharpness|5: 650
+	enchantedbook|mending: 900
+	diamondsword: 120
+	diamondsword|sharpness|5: 500
+	any|unbreaking|3: 150
+```
+
+In this example:
+
+- A Sharpness V enchanted book costs `89.3 + 650`
+- A Mending enchanted book costs `89.3 + 900`
+- A Sharpness V diamond sword costs `120 + 500`
+- Any item with Unbreaking III gets `+150`
+
 ### Clear feedback for players
 
 - **Helpful messages**: Players get clear responses for success, invalid amounts, low balance, and inventory limits.
